@@ -3,8 +3,10 @@
 #include <ESP8266HTTPClient.h>
 
 // WiFi credentials
-const char *ssid = "KARAN";
-const char *password = "12345679";
+// const char *ssid = "KARAN";
+// const char *password = "12345679";
+const char *ssid = "RIZALDY";
+const char *password = "capputo322";
 
 
 WiFiClient client;
@@ -12,6 +14,8 @@ WiFiClient client;
 void setup()
 {
   Serial.begin(115200);
+  // pinMode(2, OUTPUT);
+  // digitalWrite(2, HIGH);
   Serial.println("ESP-01 ready");
 
   WiFi.begin(ssid, password);
@@ -32,6 +36,8 @@ void loop()
 {
   if (WiFi.status() == WL_CONNECTED)
   {
+    // Serial.println("Wifi connected");
+    // digitalWrite(2, LOW);
     String IncomingStr = "";
 
     while (Serial.available() > 0)
@@ -43,7 +49,7 @@ void loop()
 
     if (IncomingStr.length() > 0)
     {
-
+      Serial.print("Wifi connected,");
       IncomingStr = IncomingStr.substring(0, IncomingStr.indexOf('\n'));
 
       String jsonSent = "{\"value\": \"" + IncomingStr + "\"}";
@@ -57,15 +63,15 @@ void loop()
 
       if (httpResponseCode > 0)
       {
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
+        // Serial.print("HTTP Response code: ");
+        // Serial.println(httpResponseCode);
         String payload = http.getString();
-        Serial.println(payload);
+        Serial.print(payload);
       }
       else
       {
         Serial.print("Error code: ");
-        Serial.println(httpResponseCode);
+        Serial.print(httpResponseCode);
       }
 
       // Close connection
@@ -74,33 +80,35 @@ void loop()
     }
 
     // Send data to Arduino
-    Serial.println("Hello from ESP-01!");
+    // Serial.println("Hello from ESP-01!");
   }
   else
   {
     // Reconnect to WiFi if disconnected
     WiFi.begin(ssid, password);
+    Serial.println("Wifi disconnected");
+    // digitalWrite(2, HIGH);
 
     // Wait for connection
     int timeout = 0;
     while (WiFi.status() != WL_CONNECTED && timeout < 20)
     { // wait for 10 seconds max
       delay(500);
-      Serial.print(".");
+      // Serial.print(".");
       timeout++;
     }
 
     if (WiFi.status() == WL_CONNECTED)
     {
-      Serial.println("");
-      Serial.println("Reconnected to WiFi");
-      Serial.println("IP address: ");
-      Serial.println(WiFi.localIP());
+      // Serial.println("");
+      // Serial.println("Reconnected to WiFi");
+      // Serial.println("IP address: ");
+      // Serial.println(WiFi.localIP());
     }
     else
     {
-      Serial.println("");
-      Serial.println("Failed to reconnect to WiFi");
+      // Serial.println("");
+      // Serial.println("Failed to reconnect to WiFi");
     }
   }
   delay(2000);
